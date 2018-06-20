@@ -1889,8 +1889,6 @@ void StratumSessionBytom::handleRequest_Submit(const string &idStr, const JsonNo
   Hex2Bin(encoded.r1, vHeader);
   Hex2Bin(sJob->seed_.c_str(), sJob->seed_.length(), vSeed);
 
-
-  make error here!!!!
   //Check share
   ShareBitcoin share;
   //  ShareBase portion
