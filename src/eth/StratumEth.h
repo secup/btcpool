@@ -31,6 +31,27 @@
 
 #include <uint256.h>
 
+class ShareEthV3// : public ShareBase
+{
+public:
+  uint32_t  checkSum_     = 0;
+  uint32_t  version_      = 0;
+
+  int64_t   workerHashId_ = 0;
+  int32_t   userId_       = 0;
+  int32_t   status_       = 0;
+  int64_t   timestamp_    = 0;
+
+  uint64_t headerHash_  = 0;
+  uint64_t shareDiff_   = 0;
+  uint64_t networkDiff_ = 0;
+  uint64_t nonce_       = 0;
+  uint32_t sessionId_   = 0;
+  uint32_t height_      = 0;
+
+  IpAddress ip_ = 0;
+};
+
 // [[[[ IMPORTANT REMINDER! ]]]]
 // Please keep the Share structure forward compatible.
 // That is: don't change it unless you add code so that
@@ -144,6 +165,31 @@ public:
 
   bool isValid() const
   {
+    if (version_ != CURRENT_VERSION_FOUNDATION && version_ != CURRENT_VERSION_CLASSIC) {
+      // it may be ShareEth v3, convert to v2
+      ShareEthV3 v3;
+      ShareEth *that = (ShareEth*)this;
+
+      memcpy(&v3, that, sizeof(ShareEthV3));
+
+      that->version_ = v3.version_;
+      that->workerHashId_ = v3.workerHashId_;
+      that->userId_ = v3.userId_;
+      that->status_ = v3.status_;
+      that->timestamp_ = v3.timestamp_;
+      that->ip_.addrUint64[0] = v3.ip_.addrUint64[0];
+      that->ip_.addrUint64[1] = v3.ip_.addrUint64[1];
+      that->headerHash_ = v3.headerHash_;
+      that->shareDiff_ = v3.shareDiff_;
+      that->networkDiff_ = v3.networkDiff_;
+      that->nonce_ = v3.nonce_;
+      that->sessionId_ = v3.sessionId_;
+      that->height_ = v3.height_;
+      that->checkSum_ = checkSum();
+
+      LOG(INFO) << "convert from v3";
+    }
+
     if (version_ != CURRENT_VERSION_FOUNDATION && version_ != CURRENT_VERSION_CLASSIC) {
       return false;
     }
