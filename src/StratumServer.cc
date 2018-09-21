@@ -803,6 +803,7 @@ kafkaProducerSolvedShare_(nullptr),
 kafkaProducerNamecoinSolvedShare_(nullptr),
 kafkaProducerCommonEvents_(nullptr), versionMask_(versionMask),
 kafkaProducerRskSolvedShare_(nullptr),
+versionMask_(versionMask),
 isEnableSimulator_(false), isSubmitInvalidBlock_(false),
 
 #ifndef WORK_WITH_STRATUM_SWITCHER
